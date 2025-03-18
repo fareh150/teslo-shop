@@ -40,7 +40,7 @@ export class ProductsService
       images
     };
     } catch (error) {
-      this.handleDBExepctions(error);
+      this.handleDBExceptions(error);
     }
   }
 
@@ -144,20 +144,16 @@ export class ProductsService
     } catch (error) {
       await queryRunner.rollbackTransaction();
       await queryRunner.release();
-      this.handleDBExepctions(error);
+      this.handleDBExceptions(error);
     }
   }
 
   async remove(id: string) {
     const product = await this.findOne(id);
-    if (!product)
-    {
-      throw new BadRequestException('product not found');
-    }
     await this.productRepository.remove(product);
   }
 
-  private handleDBExepctions(error: any)
+  private handleDBExceptions(error: any)
   {
     if (error.code === '23505')
     {
@@ -165,5 +161,19 @@ export class ProductsService
     }
     this.logger.error(error);
     throw new InternalServerErrorException('unexpected error, check logs');
+  }
+
+  async deleteAllProducts()
+  {
+    const query = this.productRepository.createQueryBuilder('product');
+
+    try {
+      return await query
+        .delete()
+        .where({})
+        .execute();
+    } catch (error) {
+      this.handleDBExceptions(error);
+    }
   }
 }
