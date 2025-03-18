@@ -4,7 +4,7 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from './entities/product.entity';
-import { Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { PaginationDto } from 'src/common/dtos/pagination.dto';
 import { validate as isUUID } from 'uuid';
 import { ProductImage } from './entities';
@@ -17,7 +17,8 @@ export class ProductsService
     @InjectRepository(Product)
     private readonly productRepository: Repository<Product>,
     @InjectRepository(ProductImage)
-    private readonly productImageRepository: Repository<ProductImage>
+    private readonly productImageRepository: Repository<ProductImage>,
+    private readonly dataSource: DataSource,
   ) {}
 
   async create(createProductDto: CreateProductDto)
@@ -102,11 +103,12 @@ export class ProductsService
     updateProductDto: UpdateProductDto
   )
   {
+    const { images, ...toUpdate } = updateProductDto;
+
     const product = await this.productRepository.preload(
       {
-        id: id,
-        ...updateProductDto,
-        images: []
+        id,
+        ...toUpdate
       }
     );
 
@@ -114,6 +116,8 @@ export class ProductsService
     {
       throw new NotFoundException(`product with id ${id} not found`);
     }
+
+    const queryRunner = this.dataSource.createQueryRunner();
 
     try {
       await this.productRepository.save(product)
