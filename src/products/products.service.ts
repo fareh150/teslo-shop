@@ -140,7 +140,7 @@ export class ProductsService
       await queryRunner.commitTransaction();
       await queryRunner.release();
 
-      return product;
+      return this.findOnePlain(id);
     } catch (error) {
       await queryRunner.rollbackTransaction();
       await queryRunner.release();
