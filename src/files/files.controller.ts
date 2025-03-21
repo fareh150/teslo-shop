@@ -2,6 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, UploadedFile, UseInt
 import { FilesService } from './files.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { fileFilter } from './helpers/fileFilter.helper';
+import { diskStorage } from 'multer';
 
 @Controller('files')
 export class FilesController {
@@ -11,6 +12,12 @@ export class FilesController {
   @UseInterceptors(FileInterceptor('file',
     {
       fileFilter: fileFilter,
+      limits: {
+        //fileSize: 1024 * 1024 * 5,
+      },
+      storage: diskStorage({
+        destination: './static/uploads',
+      })
     }
   ))
   uploadProductImage(
@@ -21,7 +28,7 @@ export class FilesController {
     {
       throw new BadRequestException('Make sure that the file is an image');
     }
-    
+
     return {
       fileName: file.originalname,
     };
