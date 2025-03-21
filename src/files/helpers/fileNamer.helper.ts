@@ -1,3 +1,5 @@
+import { v4 as uuid } from 'uuid'
+
 export const fileNamer = (
     req: Express.Request,
     file: Express.Multer.File,
@@ -10,7 +12,7 @@ export const fileNamer = (
 
     const fileExtension = file.mimetype.split('/')[1];
 
-    const fileName = `${file.fieldname}-${Date.now()}.${fileExtension}`;
+    const fileName = `${uuid()}.${fileExtension}`;
 
-    callback(null, 'nuevo nombre');
+    callback(null, fileName);
 }
