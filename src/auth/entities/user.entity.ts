@@ -9,8 +9,7 @@ export class User
     @Column('text',
         {
             unique: true
-        }
-    )
+        })
     email: string;
 
     @Column('text')
@@ -29,7 +28,6 @@ export class User
         {
             array: true,
             default: ['user']
-        }
-    )
+        })
     roles: string[];
 }
