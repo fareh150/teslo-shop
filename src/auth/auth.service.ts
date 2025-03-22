@@ -39,10 +39,13 @@ export class AuthService {
 
     if (!user)
     {
-      throw new UnauthorizedException('Invalid credentials');
+      throw new UnauthorizedException('Invalid credentials (email)');
+    }
     }
 
     return user;
+
+    // return webtoken
   }
 
   private handleDBErrors(error: any): never
