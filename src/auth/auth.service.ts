@@ -1,5 +1,5 @@
-import { BadRequestException, Injectable, InternalServerErrorException } from '@nestjs/common';
-import { CreateUserDto } from './dto';
+import { BadRequestException, Injectable, InternalServerErrorException, UnauthorizedException } from '@nestjs/common';
+import { CreateUserDto, LoginUserDto } from './dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
@@ -28,6 +28,17 @@ export class AuthService {
     }
   }
 
+  async login(loginUserDto: LoginUserDto)
+  {
+    const { email, password } = loginUserDto;
+
+    const user = await this.userRepository.findOne({
+      where: { email },
+      select: { email: true, password: true },
+    });
+
+    return user;
+  }
   private handleDBErrors(error: any): never
   {
     if (error.code === '23505')
