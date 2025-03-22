@@ -37,8 +37,14 @@ export class AuthService {
       select: { email: true, password: true },
     });
 
+    if (!user)
+    {
+      throw new UnauthorizedException('Invalid credentials');
+    }
+
     return user;
   }
+
   private handleDBErrors(error: any): never
   {
     if (error.code === '23505')
