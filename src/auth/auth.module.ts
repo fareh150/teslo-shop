@@ -22,10 +22,10 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
       inject: [ ConfigService ],
       useFactory: (configService: ConfigService) => {
         // asegura el tipo de dato
-        console.log('JWT_SECRET', configService.get('JWT_SECRET'));
-        console.log('JWT_SECRET', process.env.JWT_SECRET);
+        // console.log('JWT_SECRET', configService.get('JWT_SECRET'));
+        // console.log('JWT_SECRET', process.env.JWT_SECRET);
         return {
-          secret: process.env.JWT_SECRET,
+          secret: configService.get('JWT_SECRET'),
           signOptions: {
             expiresIn: '2h',
           }
