@@ -21,9 +21,6 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
       imports: [ ConfigModule ],
       inject: [ ConfigService ],
       useFactory: (configService: ConfigService) => {
-        // asegura el tipo de dato
-        // console.log('JWT_SECRET', configService.get('JWT_SECRET'));
-        // console.log('JWT_SECRET', process.env.JWT_SECRET);
         return {
           secret: configService.get('JWT_SECRET'),
           signOptions: {
@@ -31,13 +28,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
           }
         }
       },
-    })
-    // JwtModule.register({
-    //   secret: process.env.JWT_SECRET,
-    //   signOptions: {
-    //     expiresIn: '1d',
-    //   }
-    // })
+    }),
   ],
 })
 export class AuthModule {}
