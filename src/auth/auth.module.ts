@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
   controllers: [AuthController],
@@ -17,9 +18,11 @@ import { JwtModule } from '@nestjs/jwt';
       defaultStrategy: 'jwt',
     }),
     JwtModule.registerAsync({
-      imports: [],
-      inject: [],
-      useFactory: () => {
+      imports: [ ConfigModule ],
+      inject: [ ConfigService ],
+      useFactory: (configService: ConfigService) => {
+        // asegura el tipo de dato
+        console.log('JWT_SECRET', configService.get('JWT_SECRET'));
         console.log('JWT_SECRET', process.env.JWT_SECRET);
         return {
           secret: process.env.JWT_SECRET,
