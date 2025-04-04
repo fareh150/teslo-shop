@@ -25,7 +25,10 @@ export class AuthService {
 
       await this.userRepository.save(user);
       delete user.password;
-      return user;
+      return {
+        ...user,
+        token: this.getJwtToken({ email: user.email }),
+      };
     } catch (error) {
       this.handleDBErrors(error);
     }
@@ -50,9 +53,10 @@ export class AuthService {
       throw new UnauthorizedException('Invalid credentials (password)');
     }
 
-    return user;
-
-    // return webtoken
+    return {
+      ...user,
+      token: this.getJwtToken({ email: user.email }),
+    };
   }
 
   private getJwtToken(payload: JwtPayload)
