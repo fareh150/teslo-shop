@@ -5,7 +5,9 @@ import { JwtPayload } from "../interfaces/jwt-payload.interface";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { ConfigService } from '@nestjs/config';
+import { Injectable, UnauthorizedException } from "@nestjs/common";
 
+@Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy)
 {
     constructor(
@@ -23,6 +25,19 @@ export class JwtStrategy extends PassportStrategy(Strategy)
     async validate(payload: JwtPayload) : Promise<User>
     {
         const { email } = payload;
-        return ;
+
+        const user = await this.userRepository.findOneBy({email});
+
+        if (!user)
+        {
+            throw new UnauthorizedException('token no valido');
+        }
+
+        if (!user.isActive)
+        {
+            throw new UnauthorizedException('user inactive, talk to admin');
+        }
+
+        return user;
     }
 }
