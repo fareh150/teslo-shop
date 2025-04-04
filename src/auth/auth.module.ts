@@ -16,12 +16,25 @@ import { JwtModule } from '@nestjs/jwt';
     PassportModule.register({
       defaultStrategy: 'jwt',
     }),
-    JwtModule.register({
-      secret: '123456789',
-      signOptions: {
-        expiresIn: '1d',
-      }
+    JwtModule.registerAsync({
+      imports: [],
+      inject: [],
+      useFactory: () => {
+        console.log('JWT_SECRET', process.env.JWT_SECRET);
+        return {
+          secret: process.env.JWT_SECRET,
+          signOptions: {
+            expiresIn: '2h',
+          }
+        }
+      },
     })
+    // JwtModule.register({
+    //   secret: process.env.JWT_SECRET,
+    //   signOptions: {
+    //     expiresIn: '1d',
+    //   }
+    // })
   ],
 })
 export class AuthModule {}
