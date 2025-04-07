@@ -21,12 +21,12 @@ export class AuthController {
   @Get('private')
   @UseGuards(AuthGuard())
   testingPrivateRoute(
-    //@Req() req: Express.Request
+    @Req() req: Express.Request,
     @GetUser() user: User,
     @GetUser('email') userEmail: string,
   )
   {
-    //console.log('req', req.user);
+    console.log('req', req);
     //console.log(user);
     return {
       ok: true,
