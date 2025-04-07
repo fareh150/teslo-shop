@@ -22,15 +22,17 @@ export class AuthController {
   @UseGuards(AuthGuard())
   testingPrivateRoute(
     //@Req() req: Express.Request
-    @GetUser('id') user: User
+    @GetUser() user: User,
+    @GetUser('email') userEmail: string,
   )
   {
     //console.log('req', req.user);
-    console.log(user);
+    //console.log(user);
     return {
       ok: true,
       message: 'Hello private world',
       user: user,
+      userEmail,
     }
   }
 }
