@@ -22,8 +22,8 @@ export class MessagesWsService {
         console.log('Client removed:', clientId);
     }
 
-    getConnectedClients(): number
+    getConnectedClients(): string[]
     {
-        return Object.keys(this.connectedClients).length;
+        return Object.keys(this.connectedClients);
     }
 }
