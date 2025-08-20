@@ -16,11 +16,14 @@ export class MessagesWsGateway implements OnGatewayConnection, OnGatewayDisconne
   ) {}
 
   async handleConnection(client: Socket) {
+    console.log('Llega');
+    
     const token = client.handshake.headers.authentication as string;
     let payload: JwtPayload;
 
     try {
       payload = this.jwtService.verify<JwtPayload>(token);
+      console.log('payload conseguido');
       await this.messagesWsService.registerClient(client, payload.id);
     } catch (error) {
       client.disconnect();
