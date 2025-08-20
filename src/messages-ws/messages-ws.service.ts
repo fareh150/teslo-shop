@@ -34,13 +34,11 @@ export class MessagesWsService {
             socket: client,
             user: user
         };
-        console.log('Client registered:', client.id);
     }
 
     removeClient(clientId: string)
     {
         delete this.connectedClients[clientId];
-        console.log('Client removed:', clientId);
     }
 
     getConnectedClients(): string[]
