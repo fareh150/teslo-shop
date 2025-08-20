@@ -24,10 +24,31 @@ export class MessagesWsGateway implements OnGatewayConnection, OnGatewayDisconne
     this.wss.emit('clients-updated', this.messagesWsService.getConnectedClients());
   }
 
-  //message-from-client
+  //! Emite solo al cliente que hace la peticion
+  // @SubscribeMessage('message-from-client')
+  // handleMessageFromClient( client: Socket, payload: NewMessageDto ) {
+  //   //message-from-server
+  //   client.emit('message-from-server', {
+  //     fullName: 'soy Yo !!!!',
+  //     message: payload.message || 'no-message',
+  // });
+  // }
+
+  // //! Emite a todos menos al cliente inicial
+  // @SubscribeMessage('message-from-client')
+  // handleMessageFromClient(client: Socket, payload: NewMessageDto) {
+  //   client.broadcast.emit('message-from-server', {
+  //     fullName: 'soy Yo !!!!',
+  //     message: payload.message || 'no-message',
+  //   });
+  // }
+
+  // Emite a todos los clientes conectados
   @SubscribeMessage('message-from-client')
-  handleMessageFromClient( client: Socket, payload: NewMessageDto ) {
-    console.log(client.id, payload);
-    
+  handleMessageFromClient(client: Socket, payload: NewMessageDto) {
+    this.wss.emit('message-from-server', {
+      fullName: 'soy Yo !!!!',
+      message: payload.message || 'no-message',
+    });
   }
 }
